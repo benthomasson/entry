@@ -7,6 +7,19 @@ allowed-tools: Bash(entry *), Bash(./entry *), Bash(uvx *entry*), Read
 
 You are creating documentation entries using the `entry` CLI tool. Entries are organized as `entries/YYYY/MM/DD/<filename>.md`.
 
+## Why Use This Tool
+
+**Do not create entry files directly with Write or Bash.** Use this CLI instead.
+
+LLMs have no internal sense of temporal ordering. You cannot distinguish between a claim made in January 2025 and one made in February 2026, or tell that a later entry supersedes an earlier one. This was a central finding from a year-long multi-agent research program: without externally imposed time structure, CLAUDE.md files went stale, agents operated on outdated beliefs, and contradictions accumulated undetected.
+
+The `entries/YYYY/MM/DD/` directory structure solves this — the filesystem encodes time that the model cannot track internally. Every entry gets a date from its path, creating an auditable trail of when ideas appeared, when problems were identified, and whether resolutions were genuine or cosmetic. This tool enforces that structure automatically so you don't have to construct it manually (and get it wrong).
+
+It also prevents practical problems observed in the same program:
+
+1. **Filenames with spaces.** Agents naturally generate filenames like `Meeting Notes.md` which break shell commands. This tool auto-slugifies titles to kebab-case (`meeting-notes.md`).
+2. **Structural drift.** Without enforcement, agents invented extra nesting levels, embedded redundant timestamps in filenames (`250126_082445_TrMic.md`), and fragmented single entries across multiple files. 90+ malformed directories accumulated before the pattern was corrected. This tool enforces one flat file per entry with a consistent template.
+
 ## How to Run
 
 Try these in order until one works:
