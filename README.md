@@ -2,6 +2,21 @@
 
 CLI tool for creating chronologically organized documentation entries.
 
+## Quick Start
+
+```bash
+uv tool install git+https://github.com/benthomasson/entry
+cd ~/git/my-repo
+entry install-skill
+claude
+```
+
+Then inside Claude Code:
+
+```
+/entry hello-world
+```
+
 ## The Problem: LLMs Have No Sense of Time
 
 Large language models have no internal sense of temporal ordering. They cannot distinguish between a claim made in January 2025 and one made in February 2026. They cannot tell that a later entry supersedes an earlier one, or that a problem listed as "open" was resolved three weeks later. Every piece of text in the context window is treated as equally current.
