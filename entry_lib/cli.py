@@ -1,11 +1,21 @@
 """Entry CLI — create chronologically organized documentation entries."""
 
 import os
+import re
 import sys
 import shutil
 import argparse
 from datetime import datetime
 from pathlib import Path
+
+
+def _slugify(text: str) -> str:
+    """Convert a title string to a kebab-case filename slug."""
+    text = text.lower().strip()
+    text = re.sub(r"[^\w\s-]", "", text)
+    text = re.sub(r"[\s_]+", "-", text)
+    text = re.sub(r"-+", "-", text)
+    return text.strip("-")
 
 
 def cmd_create(args):
@@ -14,6 +24,13 @@ def cmd_create(args):
     entry_dir.mkdir(parents=True, exist_ok=True)
 
     filename = args.filename
+    title = args.title
+
+    # If filename contains spaces, treat it as a title and derive the filename
+    if " " in filename:
+        title = title or filename
+        filename = _slugify(filename)
+
     if not filename.endswith(".md"):
         filename += ".md"
 
@@ -23,7 +40,7 @@ def cmd_create(args):
         print(f"File already exists: {file_path}", file=sys.stderr)
         sys.exit(1)
 
-    title = args.title or filename.removesuffix(".md").replace("-", " ").title()
+    title = title or filename.removesuffix(".md").replace("-", " ").title()
 
     template = f"""# {title}
 
